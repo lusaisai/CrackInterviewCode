@@ -3,16 +3,15 @@ package CrackInterviewCode;
 import java.util.Arrays;
 
 /**
- * This Class contains questions and solutions regarding arrays and strings
- * Created by lusaisai on 14-2-13.
+ * This Class contains questions and solutions regarding arrays and strings.
  */
 public class ArraysAndStrings {
 
     /**
-     * <h3>
+     * <h5>
      *     Implement an algorithm to determine if a string has all unique characters.
      *     What if you can not use additional data structures?
-     * </h3>
+     * </h5>
      *
      * <p>
      *     One way is to iterate through the string, for each character, compare it with all previous characters.
@@ -69,5 +68,99 @@ public class ArraysAndStrings {
 
         return false;
     }
+
+    /**
+     * <h5>
+     *     Write code to reverse a C-Style String.
+     * </h5>
+     * <p>
+     *     C language does not have a String data type, so called string is actually called character string,
+     *     aka, a string of characters, represented as a character array, a null character indicates the end
+     *     of the string. <br/>
+     *     So this method will scan through a character array till a null character and return a character array
+     *     which is reversed and ended with a null character. <br/>
+     *     Doing it in-place can save space.
+     * </p>
+     * @param input the C-Style String represented in a character array
+     * @return a reversed character array
+     */
+    public static char[] reverseCString(char[] input) {
+        int index = 0;
+
+        for( char c : input ) {
+            if ( c == '\0' ) {
+                break;
+            } else {
+                index++;
+            }
+        }
+
+        char[] output = new char[index+1];
+        output[index--] = '\0';
+        for ( int i = 0; index >= 0; i++, index-- ) {
+            output[i] = input[index];
+        }
+
+        return output;
+    }
+
+    /**
+     * An alternative method to reverse the C-Style String in place.
+     * @param input the C-Style String represented in a character array
+     */
+    public static void reverseCString2(char[] input) {
+        int index = 0;
+
+        for( char c : input ) {
+            if ( c == '\0' ) {
+                break;
+            } else {
+                index++;
+            }
+        }
+
+        index--;
+        int i = 0;
+        while ( i < index ) {
+            char tmp = input[i];
+            input[i] = input[index];
+            input[index] = tmp;
+            i++;
+            index--;
+        }
+    }
+
+    /**
+     * <h5>
+     *     Write a method to decide if two strings are anagrams or not.
+     * </h5>
+     * <p>
+     *     Firstly, we need to define what the anagrams is. The two strings should have the same length,
+     *     have the same set of characters and the occurrences of the characters are the same. <br/>
+     *     Similar to hasDuplicate, we assume they are ascii, we can create two int array to keep occurrence times
+     *     of each character, then compare the two array, they'll be the same in case of anagrams.
+     * </p>
+     * @param a the string to compare
+     * @param b the string to compare
+     * @return if they are anagrams or not
+     */
+    public static boolean isAnagram( String a, String b ) {
+        if (a.length() != b.length()) return false;
+
+        int[] aCount = new int[256];
+        Arrays.fill(aCount, 0);
+        for ( char c : a.toCharArray() ) {
+            aCount[(int)c]++;
+        }
+
+        int[] bCount = new int[256];
+        Arrays.fill(bCount, 0);
+        for ( char c : b.toCharArray() ) {
+            bCount[(int)c]++;
+        }
+
+        return Arrays.equals(aCount,bCount);
+    }
+
 
 }
