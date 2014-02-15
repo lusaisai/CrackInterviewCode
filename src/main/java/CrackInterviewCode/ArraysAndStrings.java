@@ -162,5 +162,146 @@ public class ArraysAndStrings {
         return Arrays.equals(aCount,bCount);
     }
 
+    /**
+     * <h5>
+     *     Write a method to replace all spaces in a string with '%20'.
+     * </h5>
+     * <p>
+     *     Methods can be mutable or immutable, so, do we return a new char array or do it in place, do it
+     *     in place can save space. However, it is unlikely we can do it in place because array is fixed size while we
+     *     need more space for new chars. So, we'll return a new char array.<br/>
+     *     And we will not use the String replace method or StringBuilder, we're trying to avoid higher level structures.<br/>
+     *     We're gonna to in this way, first, scan the array once to find the number spaces, then we'll know
+     *     what the size will be for the new array, second, we scan it again, when a space shows up, we put '%20' in the new array.
+     * </p>
+     * @param input the input character array with spaces
+     * @return a new character array with spaces replaced by '%20'
+     */
+    public static char[] spaceReplace(char[] input) {
+        int count = 0;
+        for( char c : input ) {
+            if ( c == ' ' ) count++;
+        }
+
+        char[] output = new char[input.length + 2*count];
+        int i = 0;
+        for( char c: input ) {
+            if ( c == ' ' ) {
+                output[i++] = '%';
+                output[i++] = '2';
+                output[i++] = '0';
+            } else {
+                output[i++] = c;
+            }
+        }
+
+        return output;
+    }
+
+    /**
+     * <h5>
+     *     Given an image represented by an NxN matrix, where each pixel in the image is 4 bytes,
+     *     write a method to rotate the image by 90 degrees. Can you do this in place?
+     * </h5>
+     * <p>
+     *     The question is asking about doing it in place. Forget that for now, what if we are allowed to
+     *     create new rotated matrix? There's a interesting way of doing this, reading the two dimensional array
+     *     in a different direction has the same effect as rotating an image. For example, if we want to rotate
+     *     the image 90 degrees right. It is same as read the matrix column by column, from bottom up.<br/>
+     *     We can do it in this way first, and then we can try to do it in place.
+     * </p>
+     * @param input the two dimensional array
+     * @param n the dimension of the matrix
+     * @return a new rotated matrix
+     */
+    public static int[][] rotateImage(int[][] input, int n) {
+        int[][] output = new int[n][n];
+        int x = 0;
+        int y = 0;
+
+        for ( int c = 0; c < n; c++ ) {
+            for ( int r = n - 1; r >= 0; r-- ) {
+                output[x][y] = input[r][c];
+                y++;
+            }
+            x++;
+            y = 0;
+        }
+
+        return output;
+    }
+
+    /**
+     * Alternative way to rotate the image in place.<br/>
+     * We need to rotate it layer by layer and swap the integers on one edge with another one by one
+     * @param input the two dimensional array
+     * @param n the dimension of the matrix
+     */
+    public static void rotateImage2(int[][] input, int n) {
+        for( int layer = 0; layer < n/2; layer++ ) {
+            for( int offset = 0; offset < n - 2*layer - 1; offset++ ) {
+                int tmp = input[layer][layer+offset]; // the up edge
+                input[layer][layer+offset] = input[n - 1 - layer - offset][layer];
+                input[n - 1 - layer - offset][layer] = input[n - 1 - layer][n - 1 - layer - offset];
+                input[n - 1 - layer][n - 1 - layer - offset] = input[layer+offset][n - 1 - layer];
+                input[layer+offset][n - 1 - layer] = tmp;
+            }
+        }
+    }
+
+
+    /**
+     * <h5>
+     *     Write an algorithm such that if an element in an MxN matrix is 0, its entire row and column is set to 0
+     * </h5>
+     * <p>
+     *     We need to go through the whole matrix once to know which rows and columns need to be set to zero.
+     *     We can use two arrays to store this information and next go through the matrix again to set the zeroes
+     *     based on the two arrays.
+     * </p>
+     * @param input the m times n matrix
+     */
+    public static void setZeroes(int[][] input) {
+        boolean[] row = new boolean[input.length];
+        boolean[] column = new boolean[input[0].length];
+        Arrays.fill(row,false);
+        Arrays.fill(column,false);
+
+        for( int i=0; i < input.length; i++ ) {
+            for( int j = 0; j < input[0].length; j++ ) {
+                if ( input[i][j] == 0 ) {
+                    row[i] = true;
+                    column[j] = true;
+                }
+            }
+        }
+
+        for( int i=0; i < input.length; i++ ) {
+            for( int j = 0; j < input[0].length; j++ ) {
+                if (row[i] || column[j]) {
+                    input[i][j] = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * <h5>
+     *     Assume you have a method isSubstring which checks if one word is a substring of another
+     *     Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring
+     *     (i e , 'waterbottle' is a rotation of 'erbottlewat')
+     * </h5>
+     * <p>
+     *     They're rotations given that:
+     *     s1 and s2 has the same length and s1 is a substring of s2 + s2
+     * </p>
+     * @param s1 one string
+     * @param s2 the other string
+     * @return if they're rotations
+     */
+    public static boolean isRotation(String s1, String s2) {
+        return s1.length() == s2.length() && (s2 + s2).contains(s1);
+
+    }
 
 }
