@@ -1,4 +1,4 @@
 CrackInterviewCode
 ==================
 
-Questions, answers and code for interviews best on book CrackCode.
+Questions, answers and code for interviews based on book CrackCode.
