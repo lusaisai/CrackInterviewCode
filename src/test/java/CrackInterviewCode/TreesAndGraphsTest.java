@@ -8,7 +8,7 @@ public class TreesAndGraphsTest extends TestCase {
     }
 
     public void testIsBalanced() throws Exception {
-        TreesAndGraphs.MyTree t = new TreesAndGraphs.MyTree(0);
+        TreesAndGraphs.MyBinaryTree t = new TreesAndGraphs.MyBinaryTree(0);
         TreesAndGraphs.MyNode n1 = t.addLeft(t.root, 1);
         t.addLeft(n1, 3);
         t.addRight(n1, 4);
@@ -47,17 +47,25 @@ public class TreesAndGraphsTest extends TestCase {
     }
 
     public void testOrderedArrayIntoBST() throws Exception {
-        TreesAndGraphs.MyTree t = new TreesAndGraphs.MyTree();
+        TreesAndGraphs.MyBinaryTree t = new TreesAndGraphs.MyBinaryTree();
         t.orderedArrayIntoBST(new int[]{1, 2, 3, 4, 5}, t.root);
         t.bfsPrint();
     }
 
     public void testInOrderNext() throws Exception {
-        TreesAndGraphs.MyTree t = new TreesAndGraphs.MyTree();
+        TreesAndGraphs.MyBinaryTree t = new TreesAndGraphs.MyBinaryTree();
         t.orderedArrayIntoBST(new int[]{1,2,3,4,5,6,7,8,9}, t.root);
         t.bfsPrint();
         assertEquals( 8, (int)t.inOrderNext( t.root.right ).data );
         assertEquals( 5, (int)t.inOrderNext( t.root.left.right.right ).data );
 
+    }
+
+    public void testFirstCommonAncestor() throws Exception {
+        TreesAndGraphs.MyBinaryTree t = new TreesAndGraphs.MyBinaryTree();
+        t.orderedArrayIntoBST(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9}, t.root);
+        t.bfsPrint();
+        assertEquals(5, (int) TreesAndGraphs.MyBinaryTree.firstCommonAncestor(t.root.left.right, t.root.right.right.right).data);
+        assertEquals( 2, (int) TreesAndGraphs.MyBinaryTree.firstCommonAncestor(t.root.left.left, t.root.left.right.right).data);
     }
 }

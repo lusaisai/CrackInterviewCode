@@ -18,14 +18,14 @@ public class TreesAndGraphs {
 
     }
 
-    public static class MyTree{
+    public static class MyBinaryTree {
         MyNode root;
 
-        public MyTree(Integer rootData) {
+        public MyBinaryTree(Integer rootData) {
             this.root = new MyNode(rootData);
         }
 
-        public MyTree() {
+        public MyBinaryTree() {
             this.root = new MyNode(null);
         }
 
@@ -49,6 +49,80 @@ public class TreesAndGraphs {
                 rightNode.parent = parentNode;
                 return rightNode;
             }
+        }
+
+        /**
+         * <h5>
+         *     You have two very large binary trees: T1, with millions of nodes, and T2,
+         *     with hundreds of nodes Create an algorithm to decide if T2 is a subtree of T1
+         * </h5>
+         * <p>
+         *     We can do it in brute force, travel thru t1, if t2's root is found, comparing their subtree to see if they
+         *     are the same, if not, keep travelling to the depth of ( depth(t1) ( - depth(t1) - depth(t2) ) ). <br/>
+         *     Or we can turn t1 into a suffix trie, then search t2 in the trie like string searching, a substring is
+         *     a prefix of some suffixes. But there could be a memory issue since here we have millions of nodes. But this
+         *     is fun, I'll implement this method later.
+         * </p>
+         * @param t the subtree candidate
+         * @return if it is a subtree
+         */
+        public boolean isSubtree( MyBinaryTree t ) {
+            return false;
+        }
+
+        public static int depth( MyNode node ) {
+            if ( node.parent == null ) return 0;
+            return 1 + depth(node.parent);
+        }
+
+        /**
+         * <h5>
+         *     Design an algorithm and write code to find the first common ancestor of two nodes in a binary tree
+         *     Avoid storing additional nodes in a data structure NOTE: This is not necessarily a binary search tree
+         * </h5>
+         * <p>
+         *     We can go down the binary tree, if the node is not the first common ancestor, the two nodes will be on the
+         *     same subtree of the node, then we keep going down till the two nodes lives in two sides, that node will be
+         *     the first common ancestor. The tricky part is when we go down, we need to search the two nodes to determine
+         *     which subtree they live, a binary search tree is good at searching, if it is not, the search performs badly
+         *     as it requires traversing the subtrees.<br/>
+         *     Here we're going to do it in another straightforward way. We first get their depth, and keep moving one up till
+         *     till they have the same depth. Then, move them up together, when they meet, it is the first ancestor.
+         * </p>
+         * @param a one node
+         * @param b the other node
+         * @return their first common ancestor
+         */
+        public static MyNode firstCommonAncestor( MyNode a, MyNode b ) {
+            while ( depth(a) > depth(b) ) {
+                a = a.parent;
+            }
+            while ( depth(b) > depth(a) ) {
+                b = b.parent;
+            }
+
+            while ( a != null && b != null ) {
+                if ( a == b ) return a;
+                a = a.parent;
+                b = b.parent;
+            }
+
+            return null;
+        }
+
+        /**
+         * <h5>
+         *     You are given a binary tree in which each node contains a value Design an algorithm to print all paths
+         *     which sum up to that value Note that it can be any path in the tree it does not have to start at the root
+         * </h5>
+         * <p>
+         *     We can expand the node, minus the values at next level till it is not positive, it is basically a
+         *     graph breadth first traversal, see bfs method below, I don't have to implement again.
+         * </p>
+         * @param node
+         */
+        public static void pathSumToMe(MyNode node) {
+
         }
 
         /**
@@ -114,7 +188,7 @@ public class TreesAndGraphs {
             }
         }
 
-        public MyTree orderedArrayIntoBST( int[] elements, MyNode root ) {
+        public MyBinaryTree orderedArrayIntoBST( int[] elements, MyNode root ) {
             addArrayToNode(elements,root,0,elements.length-1);
             return this;
         }
